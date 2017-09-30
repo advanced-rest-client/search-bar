@@ -68,7 +68,7 @@ Custom property | Description | Default
       @apply --search-bar-counters;
     }
     </style>
-    <paper-input label="Search text" no-label-float value="{{value}}">
+    <paper-input label="Search text" no-label-float value="{{value}}" id="input">
       <div suffix class="counters">[[selected]] of [[searchCount]]</div>
     </paper-input>
     <paper-icon-button icon="arc:keyboard-arrow-up" title="Previous" on-tap="highlightPrevious"></paper-icon-button>
@@ -149,8 +149,9 @@ Custom property | Description | Default
 
     focusInput: function() {
       this.async(() => {
-        this.$.input.focus();
-        this.$.input.select();
+        let i = this.$.input;
+        i.inputElement.focus();
+        i.inputElement.select();
       }, 1);
     },
     /**
