@@ -1,6 +1,6 @@
 {
   "name": "search-bar",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "Apache-2.0 OR CC-BY-4.0",
   "description": "A search bar for the Advanced REST Client",
   "devDependencies": {
