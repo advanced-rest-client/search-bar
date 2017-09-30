@@ -1,0 +1,145 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../iron-test-helpers/test-helpers.js"></script>
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
+    <link rel="import" href="../search-bar.html">
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <search-bar></search-bar>
+      </template>
+    </test-fixture>
+
+    <script>
+    /* global fixture, assert */
+    suite('basic', function() {
+
+      var element;
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('fires search-bar-opened-changed on open', function(done) {
+        element.value = 'test';
+        element.addEventListener('search-bar-opened-changed', function clb(e) {
+          element.removeEventListener('search-bar-opened-changed', clb);
+          assert.equal(e.detail.value, 'test', 'value is set');
+          assert.isTrue(e.detail.opened, 'opened is true');
+          done();
+        });
+        element.opened = true;
+      });
+
+      test('fires search-bar-opened-changed on close', function(done) {
+        element.value = 'test';
+        element.opened = true;
+
+        element.addEventListener('search-bar-opened-changed', function clb(e) {
+          element.removeEventListener('search-bar-opened-changed', clb);
+          assert.isUndefined(e.detail.value, 'value is undefined');
+          assert.isFalse(e.detail.opened, 'opened is false');
+          done();
+        });
+        element.opened = false;
+      });
+
+      test('fires search-bar-input-changed', function(done) {
+        element.opened = true;
+
+        element.addEventListener('search-bar-input-changed', function clb(e) {
+          element.removeEventListener('search-bar-input-changed', clb);
+
+          assert.equal(e.detail.value, 'abc', 'value is set');
+          assert.equal(e.detail.lastTarget, 'TEST', 'lastTarget is set');
+
+          done();
+        });
+        element.target = 'TEST';
+        element.value = 'abc';
+      });
+
+      test('searchCount is 0', function() {
+        assert.equal(element.searchCount, 0);
+      });
+
+      test('selected is 0', function() {
+        assert.equal(element.selected, 0);
+      });
+
+      function updateCounter(number) {
+        var event = new CustomEvent('search-bar-search-mark-count', {
+          detail: {
+            count: number
+          },
+          bubbles: true
+        });
+        document.body.dispatchEvent(event);
+      }
+
+      test('Sets the counter data', function() {
+        updateCounter(12);
+        assert.equal(element.searchCount, 12);
+        assert.equal(element.selected, 0);
+      });
+
+      test('Sets selected to 0', function() {
+        element._setSelected(5);
+        updateCounter(0);
+        assert.equal(element.selected, 0);
+      });
+
+      test('highlightPrevious fires search-bar-input-changed', function(done) {
+        element.opened = true;
+        updateCounter(12);
+        element._setSelected(5);
+        element.target = 'TEST';
+
+        element.addEventListener('search-bar-search-position-changed', function clb(e) {
+          element.removeEventListener('search-bar-search-position-changed', clb);
+
+          assert.equal(e.detail.position, 3, 'position is set');
+          assert.equal(e.detail.searchTarget, 'TEST', 'searchTarget is set');
+
+          done();
+        });
+        element.highlightPrevious();
+      });
+
+      test('highlightNext fires search-bar-input-changed', function(done) {
+        element.opened = true;
+        updateCounter(12);
+        element._setSelected(5);
+        element.target = 'TEST';
+
+        element.addEventListener('search-bar-search-position-changed', function clb(e) {
+          element.removeEventListener('search-bar-search-position-changed', clb);
+
+          assert.equal(e.detail.position, 5, 'position is set');
+          assert.equal(e.detail.searchTarget, 'TEST', 'searchTarget is set');
+
+          done();
+        });
+        element.highlightNext();
+      });
+    });
+    </script>
+
+  </body>
+</html>
