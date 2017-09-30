@@ -1,3 +1,17 @@
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/advanced-rest-client/search-bar/compare/0.1.1...0.1.2) (2017-09-30)
+
+
+### Fix
+
+* Fixed missing name. ([65e37895970022a1f0d3d4c7dbd19ddda6573160](https://github.com/advanced-rest-client/search-bar/commit/65e37895970022a1f0d3d4c7dbd19ddda6573160))
+
+### Update
+
+* Restored other browsers for tests. ([f03cdf6258e656b6428b3fa6502cd095246549d1](https://github.com/advanced-rest-client/search-bar/commit/f03cdf6258e656b6428b3fa6502cd095246549d1))
+
+
+
 <a name="0.1.1"></a>
 ## 0.1.1 (2017-09-30)
 
